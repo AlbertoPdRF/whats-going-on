@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Octokit } from '@octokit/rest';
-import { BaseStyles, Flex, Box, Heading } from '@primer/components';
+import {
+  BaseStyles,
+  Flex,
+  Box,
+  Heading,
+  Flash,
+  StyledOcticon,
+} from '@primer/components';
+import { XIcon } from '@primer/octicons-react';
 
 import { ReactComponent as SearchImage } from '../../svg/search.svg';
 import SearchForm from '../SearchForm/SearchForm';
@@ -37,10 +45,6 @@ const App = () => {
     data && console.log(data);
   }, [data]);
 
-  useEffect(() => {
-    error && console.log(error);
-  }, [error]);
-
   return (
     <BaseStyles>
       <Flex flexDirection="column" alignItems="center" m={2}>
@@ -58,6 +62,12 @@ const App = () => {
           handleSearchClick={handleSearchClick}
           loading={loading}
         />
+        {error && (
+          <Flash variant="danger">
+            <StyledOcticon icon={XIcon} />
+            {error.message}
+          </Flash>
+        )}
       </Flex>
     </BaseStyles>
   );
