@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Octokit } from '@octokit/rest';
-import { BaseStyles } from '@primer/components';
+import { BaseStyles, Flex, Box, Heading } from '@primer/components';
 
+import { ReactComponent as SearchImage } from '../../svg/search.svg';
 import SearchForm from '../SearchForm/SearchForm';
 
 const App = () => {
@@ -42,14 +43,22 @@ const App = () => {
 
   return (
     <BaseStyles>
-      <SearchForm
-        owner={owner}
-        handleOwnerChange={handleOwnerChange}
-        repo={repo}
-        handleRepoChange={handleRepoChange}
-        handleSearchClick={handleSearchClick}
-        loading={loading}
-      />
+      <Flex flexDirection="column" alignItems="center" m={2}>
+        <Box width={[1, 1, 1 / 2, 1 / 3]} m={2}>
+          <Box as={SearchImage} width="100%" height={null} />
+        </Box>
+        <Heading fontSize={3} textAlign="center" m={2}>
+          Get to know what's going on in any GitHub repository!
+        </Heading>
+        <SearchForm
+          owner={owner}
+          handleOwnerChange={handleOwnerChange}
+          repo={repo}
+          handleRepoChange={handleRepoChange}
+          handleSearchClick={handleSearchClick}
+          loading={loading}
+        />
+      </Flex>
     </BaseStyles>
   );
 };
