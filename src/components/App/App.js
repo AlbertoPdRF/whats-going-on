@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Octokit } from '@octokit/rest';
 import {
   BaseStyles,
@@ -12,12 +12,13 @@ import { XIcon } from '@primer/octicons-react';
 
 import { ReactComponent as SearchImage } from '../../svg/search.svg';
 import SearchForm from '../SearchForm/SearchForm';
+import Events from '../Events/Events';
 
 const App = () => {
   const [owner, setOwner] = useState('');
   const [repo, setRepo] = useState('');
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(null);
+  const [events, setEvents] = useState(null);
   const [error, setError] = useState(null);
 
   const handleOwnerChange = (owner) => setOwner(owner);
@@ -26,24 +27,20 @@ const App = () => {
 
   const handleSearchClick = () => {
     setLoading(true);
-    setData(null);
+    setEvents(null);
     setError(null);
 
-    octokit.activity
-      .listRepoEvents({
+    octokit
+      .paginate('GET /repos/:owner/:repo/events', {
         owner,
         repo,
       })
-      .then((data) => setData(data))
+      .then((events) => setEvents(events))
       .catch((error) => setError(error))
       .finally(() => setLoading(false));
   };
 
   const octokit = new Octokit();
-
-  useEffect(() => {
-    data && console.log(data);
-  }, [data]);
 
   return (
     <BaseStyles>
@@ -68,6 +65,7 @@ const App = () => {
             {error.message}
           </Flash>
         )}
+        {events && <Events events={events} />}
       </Flex>
     </BaseStyles>
   );
