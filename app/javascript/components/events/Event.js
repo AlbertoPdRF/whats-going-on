@@ -35,20 +35,10 @@ const Event = (props) => {
     case 'CommitCommentEvent': {
       const comment = payload.comment;
       url = comment.html_url;
-      switch (p_action) {
-        case 'created': {
-          icon = CommentIcon;
-          color = 'gray';
-          action = 'commented on';
-          item = comment.commit_id.substr(0, 7);
-
-          break;
-        }
-        default: {
-          show = false;
-          break;
-        }
-      }
+      icon = CommentIcon;
+      color = 'gray';
+      action = 'commented on';
+      item = comment.commit_id.substr(0, 7);
 
       break;
     }
