@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Octokit } from '@octokit/rest';
 import {
   BaseStyles,
   Flex,
@@ -31,17 +30,16 @@ const Events = () => {
     setEvents(null);
     setError(null);
 
-    octokit
-      .paginate('GET /repos/:owner/:repo/events', {
-        owner,
-        repo,
-      })
+    fetch(`?owner=${owner}&repo=${repo}`, {
+      headers: new Headers({
+        Accept: 'application/json',
+      }),
+    })
+      .then((response) => response.json())
       .then((events) => setEvents(events))
       .catch((error) => setError(error))
       .finally(() => setLoading(false));
   };
-
-  const octokit = new Octokit();
 
   return (
     <BaseStyles>
