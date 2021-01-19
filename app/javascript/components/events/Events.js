@@ -7,14 +7,15 @@ import {
   Heading,
   Flash,
   StyledOcticon,
+  Timeline,
 } from '@primer/components';
 import { XIcon } from '@primer/octicons-react';
 
-import { ReactComponent as SearchImage } from '../../svg/search.svg';
-import SearchForm from '../SearchForm/SearchForm';
-import Events from '../Events/Events';
+import { ReactComponent as SearchImage } from 'images/search.svg';
+import SearchForm from './SearchForm';
+import Event from './Event';
 
-const App = () => {
+const Events = () => {
   const [owner, setOwner] = useState('');
   const [repo, setRepo] = useState('');
   const [loading, setLoading] = useState(false);
@@ -65,10 +66,18 @@ const App = () => {
             {error.message}
           </Flash>
         )}
-        {events && <Events events={events} />}
+        {events && (
+          <Timeline>
+            <Timeline.Break />
+            {events.map((event) => (
+              <Event key={event.id} event={event} />
+            ))}
+            <Timeline.Break />
+          </Timeline>
+        )}
       </Flex>
     </BaseStyles>
   );
 };
 
-export default App;
+export default Events;
