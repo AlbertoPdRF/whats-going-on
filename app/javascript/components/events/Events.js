@@ -14,11 +14,11 @@ import { ReactComponent as SearchImage } from 'images/search.svg';
 import SearchForm from './SearchForm';
 import Event from './Event';
 
-const Events = () => {
-  const [owner, setOwner] = useState('');
-  const [repo, setRepo] = useState('');
+const Events = (props) => {
+  const [owner, setOwner] = useState(props.owner || '');
+  const [repo, setRepo] = useState(props.repo || '');
   const [loading, setLoading] = useState(false);
-  const [events, setEvents] = useState(null);
+  const [events, setEvents] = useState(props.events || null);
   const [error, setError] = useState(null);
 
   const handleOwnerChange = (owner) => setOwner(owner);
@@ -30,7 +30,10 @@ const Events = () => {
     setEvents(null);
     setError(null);
 
-    fetch(`?owner=${owner}&repo=${repo}`, {
+    const url = `?${new URLSearchParams({ owner, repo }).toString()}`;
+    history.pushState(null, null, url);
+
+    fetch(url, {
       headers: new Headers({
         Accept: 'application/json',
       }),
