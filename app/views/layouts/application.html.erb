@@ -20,6 +20,7 @@
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <%= react_component("navigation_bar/NavigationBar", { user: current_user }) %>
     <%= yield %>
   </body>
 </html>
