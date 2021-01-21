@@ -6,11 +6,14 @@ import {
   Avatar,
   Link,
   StyledOcticon,
+  Flash,
 } from '@primer/components';
-import { MarkGithubIcon } from '@primer/octicons-react';
+import { MarkGithubIcon, InfoIcon } from '@primer/octicons-react';
 
 const NavigationBar = (props) => {
   const { user } = props;
+
+  const signInUrl = '/users/auth/github';
 
   return (
     <BaseStyles>
@@ -38,7 +41,7 @@ const NavigationBar = (props) => {
             </Dropdown>
           ) : (
             <Header.Link
-              href="/users/auth/github"
+              href={signInUrl}
               fontSize={3}
               border={1}
               borderRadius={1}
@@ -52,6 +55,15 @@ const NavigationBar = (props) => {
           )}
         </Header.Item>
       </Header>
+      {!user && (
+        <Flash variant="warning" m={2}>
+          <StyledOcticon icon={InfoIcon} />
+          <Link href={signInUrl} fontWeight="bold" color="gray.8" mr={1} muted>
+            Signing in
+          </Link>
+          will allow you to make more searches
+        </Flash>
+      )}
     </BaseStyles>
   );
 };

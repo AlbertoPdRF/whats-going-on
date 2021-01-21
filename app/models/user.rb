@@ -6,6 +6,7 @@ class User < ApplicationRecord
     user.email = auth.info.email
     user.avatar = auth.info.image
     user.username = auth.info.nickname
+    user.token = auth.credentials.token
 
     user.save
     user

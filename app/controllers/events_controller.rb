@@ -3,7 +3,9 @@ class EventsController < ApplicationController
     @owner = params[:owner]
     @repo = params[:repo]
     unless @owner.nil? || @repo.nil?
-      @events = Octokit::Client.new(auto_paginate: true).repository_events("#{@owner}/#{@repo}").map(&:to_h)
+      octokit = Octokit::Client.new(auto_paginate: true)
+      octokit.access_token = current_user.token if current_user
+      @events = octokit.repository_events("#{@owner}/#{@repo}").map(&:to_h)
     end
 
     respond_to do |format|
