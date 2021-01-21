@@ -177,7 +177,7 @@ const Event = (props) => {
               icon = FileDiffIcon;
               color = 'red';
               action = 'requested changes on';
-              item = `requested changes on #${payload.pull_request.number}`;
+              item = `#${payload.pull_request.number}`;
 
               break;
             }
