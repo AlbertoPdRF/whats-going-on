@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from '@primer/components';
 
 const ExternalLink = (props) => {
-  const { href, text } = props;
+  const { href, text, ...rest } = props;
 
   return (
     <Link
@@ -13,6 +13,7 @@ const ExternalLink = (props) => {
       color="gray.8"
       mr={1}
       muted
+      {...rest}
     >
       {text}
     </Link>

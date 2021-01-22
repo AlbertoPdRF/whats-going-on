@@ -12,11 +12,13 @@ import { XIcon } from '@primer/octicons-react';
 
 import { ReactComponent as SearchImage } from 'images/search.svg';
 import SearchForm from './SearchForm';
+import Repository from '../shared/Repository';
 import Event from './Event';
 
 const Events = (props) => {
-  const [owner, setOwner] = useState(props.owner || '');
-  const [repo, setRepo] = useState(props.repo || '');
+  const [owner, setOwner] = useState(props.repository?.owner || '');
+  const [repo, setRepo] = useState(props.repository?.repo || '');
+  const [repository, setRepository] = useState(props.repository || null);
   const [loading, setLoading] = useState(false);
   const [events, setEvents] = useState(props.events || null);
   const [error, setError] = useState(null);
@@ -27,6 +29,7 @@ const Events = (props) => {
 
   const handleSearchClick = () => {
     setLoading(true);
+    setRepository(null);
     setEvents(null);
     setError(null);
 
@@ -39,7 +42,36 @@ const Events = (props) => {
       }),
     })
       .then((response) => response.json())
-      .then((events) => setEvents(events))
+      .then((data) => {
+        setRepository(data.repository);
+        setEvents(data.events);
+      })
+      .catch((error) => setError(error))
+      .finally(() => setLoading(false));
+  };
+
+  const handleSaveClick = () => {
+    setLoading(true);
+    setError(null);
+
+    const id = repository.id;
+    const url = '/repositories' + (id ? `/${id}` : '');
+    const method = id ? 'DELETE' : 'POST';
+
+    fetch(url, {
+      method: method,
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content,
+      }),
+      body: JSON.stringify({ repository }),
+    })
+      .then((response) => response.json())
+      .then((repository) => {
+        if (id) delete repository.id;
+        setRepository(repository);
+      })
       .catch((error) => setError(error))
       .finally(() => setLoading(false));
   };
@@ -66,6 +98,13 @@ const Events = (props) => {
             <StyledOcticon icon={XIcon} />
             {error.message}
           </Flash>
+        )}
+        {repository && (
+          <Repository
+            repository={repository}
+            handleSaveClick={handleSaveClick}
+            loading={loading}
+          />
         )}
         {events && (
           <Timeline>

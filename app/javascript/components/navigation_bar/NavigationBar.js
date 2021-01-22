@@ -36,6 +36,9 @@ const NavigationBar = (props) => {
               </Dropdown.Button>
               <Dropdown.Menu direction="sw">
                 <Dropdown.Item>
+                  <Link href="/repositories">Repositories</Link>
+                </Dropdown.Item>
+                <Dropdown.Item>
                   <Link href="sign-out">Sign out</Link>
                 </Dropdown.Item>
               </Dropdown.Menu>
@@ -60,7 +63,7 @@ const NavigationBar = (props) => {
           <Link href={signInUrl} fontWeight="bold" color="gray.8" mr={1} muted>
             Signing in
           </Link>
-          will allow you to make more searches
+          will allow you to make more searches and save them
         </Flash>
       )}
     </BaseStyles>

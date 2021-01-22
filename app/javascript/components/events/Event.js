@@ -16,7 +16,7 @@ import {
   StarIcon,
 } from '@primer/octicons-react';
 
-import ExternalLink from '../external_link/ExternalLink';
+import ExternalLink from '../shared/ExternalLink';
 
 const Event = (props) => {
   const { event } = props;
