@@ -5,6 +5,7 @@ import {
   Dropdown,
   Avatar,
   Link,
+  BorderBox,
   StyledOcticon,
   Flash,
 } from '@primer/components';
@@ -41,11 +42,9 @@ const NavigationBar = (props) => {
             </Dropdown>
           ) : (
             <Header.Link
+              as={BorderBox}
               href={signInUrl}
               fontSize={3}
-              border={1}
-              borderRadius={1}
-              borderStyle="solid"
               px={2}
               py={1}
             >
