@@ -41,8 +41,8 @@ const NavigationBar = (props) => {
               </Dropdown.Menu>
             </Dropdown>
           ) : (
-            <Header.Link
-              as={BorderBox}
+            <BorderBox
+              as={Header.Link}
               href={signInUrl}
               fontSize={3}
               px={2}
@@ -50,7 +50,7 @@ const NavigationBar = (props) => {
             >
               <span>Sign in with</span>
               <StyledOcticon icon={MarkGithubIcon} size={24} ml={2} />
-            </Header.Link>
+            </BorderBox>
           )}
         </Header.Item>
       </Header>
