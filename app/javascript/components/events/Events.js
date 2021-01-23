@@ -1,86 +1,40 @@
-import React, { useState } from 'react';
-import {
-  BaseStyles,
-  Flex,
-  Box,
-  Heading,
-  Flash,
-  StyledOcticon,
-  Timeline,
-} from '@primer/components';
-import { XIcon } from '@primer/octicons-react';
+import React, { useState, useLayoutEffect } from 'react';
+import { BaseStyles, Flex, Box, Heading } from '@primer/components';
 
 import { ReactComponent as SearchImage } from 'images/search.svg';
 import SearchForm from './SearchForm';
-import Repository from '../shared/Repository';
-import Event from './Event';
+import Display from './Display';
 
-import {
-  root_path,
-  repository_path,
-  repositories_path,
-} from '../../routes.js.erb';
+import { root_path } from '../../routes.js.erb';
 
-const Events = (props) => {
-  const [owner, setOwner] = useState(props.repository?.owner || '');
-  const [repo, setRepo] = useState(props.repository?.repo || '');
-  const [repository, setRepository] = useState(props.repository || null);
+const Events = () => {
+  const [owner, setOwner] = useState('');
+  const [repo, setRepo] = useState('');
+  const [url, setUrl] = useState('');
   const [loading, setLoading] = useState(false);
-  const [events, setEvents] = useState(props.events || null);
-  const [error, setError] = useState(null);
+
+  useLayoutEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('owner') && params.has('repo')) {
+      const owner = params.get('owner');
+      setOwner(owner);
+      const repo = params.get('repo');
+      setRepo(repo);
+      setUrl(root_path({ owner, repo }));
+    }
+  }, []);
 
   const handleOwnerChange = (owner) => setOwner(owner);
 
   const handleRepoChange = (repo) => setRepo(repo);
 
   const handleSearchClick = () => {
-    setLoading(true);
-    setRepository(null);
-    setEvents(null);
-    setError(null);
-
     const url = root_path({ owner, repo });
     history.pushState(null, null, url);
-
-    fetch(url, {
-      headers: new Headers({
-        Accept: 'application/json',
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setRepository(data.repository);
-        setEvents(data.events);
-      })
-      .catch((error) => setError(error))
-      .finally(() => setLoading(false));
+    setUrl(url);
   };
 
-  const handleSaveClick = () => {
-    setLoading(true);
-    setError(null);
-
-    const id = repository.id;
-    const url = id ? repository_path(id) : repositories_path();
-    const method = id ? 'DELETE' : 'POST';
-
-    fetch(url, {
-      method: method,
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': document.querySelector('meta[name=csrf-token]').content,
-      }),
-      body: JSON.stringify({ repository }),
-    })
-      .then((response) => response.json())
-      .then((repository) => {
-        if (id) delete repository.id;
-        setRepository(repository);
-      })
-      .catch((error) => setError(error))
-      .finally(() => setLoading(false));
-  };
+  const handleLoadingChange = (loading) => setLoading(loading);
 
   return (
     <BaseStyles>
@@ -99,28 +53,7 @@ const Events = (props) => {
           handleSearchClick={handleSearchClick}
           loading={loading}
         />
-        {error && (
-          <Flash variant="danger">
-            <StyledOcticon icon={XIcon} />
-            {error.message}
-          </Flash>
-        )}
-        {repository && (
-          <Repository
-            repository={repository}
-            handleSaveClick={handleSaveClick}
-            loading={loading}
-          />
-        )}
-        {events && (
-          <Timeline>
-            <Timeline.Break />
-            {events.map((event) => (
-              <Event key={event.id} event={event} />
-            ))}
-            <Timeline.Break />
-          </Timeline>
-        )}
+        {url && <Display url={url} handleLoadingChange={handleLoadingChange} />}
       </Flex>
     </BaseStyles>
   );
