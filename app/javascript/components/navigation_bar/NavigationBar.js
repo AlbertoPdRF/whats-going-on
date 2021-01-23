@@ -11,16 +11,21 @@ import {
 } from '@primer/components';
 import { MarkGithubIcon, InfoIcon } from '@primer/octicons-react';
 
+import {
+  root_path,
+  repositories_path,
+  destroy_user_session_path,
+  user_github_omniauth_authorize_path,
+} from '../../routes.js.erb';
+
 const NavigationBar = (props) => {
   const { user } = props;
-
-  const signInUrl = '/users/auth/github';
 
   return (
     <BaseStyles>
       <Header>
         <Header.Item full>
-          <Header.Link href="/" fontSize={4}>
+          <Header.Link href={root_path()} fontSize={4}>
             <span>Whagon</span>
           </Header.Link>
         </Header.Item>
@@ -36,17 +41,17 @@ const NavigationBar = (props) => {
               </Dropdown.Button>
               <Dropdown.Menu direction="sw">
                 <Dropdown.Item>
-                  <Link href="/repositories">Repositories</Link>
+                  <Link href={repositories_path()}>Repositories</Link>
                 </Dropdown.Item>
                 <Dropdown.Item>
-                  <Link href="sign-out">Sign out</Link>
+                  <Link href={destroy_user_session_path()}>Sign out</Link>
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
           ) : (
             <BorderBox
               as={Header.Link}
-              href={signInUrl}
+              href={user_github_omniauth_authorize_path()}
               fontSize={3}
               px={2}
               py={1}
@@ -60,7 +65,13 @@ const NavigationBar = (props) => {
       {!user && (
         <Flash variant="warning" m={2}>
           <StyledOcticon icon={InfoIcon} />
-          <Link href={signInUrl} fontWeight="bold" color="gray.8" mr={1} muted>
+          <Link
+            href={user_github_omniauth_authorize_path()}
+            fontWeight="bold"
+            color="gray.8"
+            mr={1}
+            muted
+          >
             Signing in
           </Link>
           will allow you to make more searches and save them

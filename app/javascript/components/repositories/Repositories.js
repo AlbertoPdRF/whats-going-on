@@ -10,6 +10,8 @@ import { InfoIcon } from '@primer/octicons-react';
 
 import Repository from '../shared/Repository';
 
+import { root_path } from '../../routes.js.erb';
+
 const Repositories = (props) => {
   const { repositories } = props;
 
@@ -24,7 +26,14 @@ const Repositories = (props) => {
           <Flash variant="warning">
             <StyledOcticon icon={InfoIcon} />
             You don't have any saved repositories,
-            <Link href="/" fontWeight="bold" color="gray.8" ml={1} mr={1} muted>
+            <Link
+              href={root_path()}
+              fontWeight="bold"
+              color="gray.8"
+              ml={1}
+              mr={1}
+              muted
+            >
               go back to the main page
             </Link>
             and save some of your searches!

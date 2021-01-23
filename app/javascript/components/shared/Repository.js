@@ -12,6 +12,8 @@ import { RepoIcon } from '@primer/octicons-react';
 
 import ExternalLink from '../shared/ExternalLink';
 
+import { root_path } from '../../routes.js.erb';
+
 const Repository = (props) => {
   const { repository, handleSaveClick, loading } = props;
   const { id, user_id, owner, repo, url } = repository;
@@ -37,10 +39,7 @@ const Repository = (props) => {
                   {loading ? 'Loading...' : 'Unsave'}
                 </ButtonDanger>
               ) : (
-                <Link
-                  href={`/?${new URLSearchParams({ owner, repo }).toString()}`}
-                  fontWeight="bold"
-                >
+                <Link href={root_path({ owner, repo })} fontWeight="bold">
                   Search
                 </Link>
               )

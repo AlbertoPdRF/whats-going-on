@@ -15,6 +15,12 @@ import SearchForm from './SearchForm';
 import Repository from '../shared/Repository';
 import Event from './Event';
 
+import {
+  root_path,
+  repository_path,
+  repositories_path,
+} from '../../routes.js.erb';
+
 const Events = (props) => {
   const [owner, setOwner] = useState(props.repository?.owner || '');
   const [repo, setRepo] = useState(props.repository?.repo || '');
@@ -33,7 +39,7 @@ const Events = (props) => {
     setEvents(null);
     setError(null);
 
-    const url = `?${new URLSearchParams({ owner, repo }).toString()}`;
+    const url = root_path({ owner, repo });
     history.pushState(null, null, url);
 
     fetch(url, {
@@ -55,7 +61,7 @@ const Events = (props) => {
     setError(null);
 
     const id = repository.id;
-    const url = '/repositories' + (id ? `/${id}` : '');
+    const url = id ? repository_path(id) : repositories_path();
     const method = id ? 'DELETE' : 'POST';
 
     fetch(url, {
